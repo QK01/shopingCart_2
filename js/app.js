@@ -63,7 +63,7 @@ function addToCart(cInfo) {
             <td>${cInfo.price}</td> 
             <td></td> 
             <td>
-                <a href="#" class="remove">x</a>
+                <a href="#" class="remove" data-id ="${cInfo.id}">x</a>
             </td>
         </tr>   
     `
@@ -98,10 +98,34 @@ function getFromStorage() {
 
 // remove course from cart
 function removeCourse(e){
+    let course , courseId;
     if (e.target.classList.contains('remove')) {
-         e.target.parentElement.parentElement.remove()
+        
+        e.target.parentElement.parentElement.remove()
+        course = e.target.parentElement.parentElement
+        courseId = course.querySelector('a').getAttribute('data-id')
+               
     }
+
+    // remove course from LS
+    removeCourseLS(courseId)
 }
+
+
+// remove course from Local Storage
+function removeCourseLS(id) {
+    let coursesLS = getFromStorage()
+
+    coursesLS.forEach(function(course, index) {
+        if (course.id === id) {
+            coursesLS.splice(index, 1)
+        }
+    });
+
+    localStorage.setItem('courses', JSON.stringify(coursesLS))
+}
+
+
 
 // clear all courses from cart 
 function clearCartComplete(e){
